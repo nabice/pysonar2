@@ -2,6 +2,7 @@ import ast
 import re
 import sys
 import codecs
+import tokenize
 
 from json import JSONEncoder
 from ast import *
@@ -41,6 +42,7 @@ def parse_dump(filename, output, end_mark):
             encoder = AstEncoder(encoding=enc)
 
         tree = parse_file(filename)
+        parse_comment(filename, tree)
         encoded = encoder.encode(tree)
         f = open(output, "w")
         f.write(encoded)
@@ -50,6 +52,13 @@ def parse_dump(filename, output, end_mark):
         f = open(end_mark, "w")
         f.close()
 
+def parse_comment(filename, tree):
+    tokens = tokenize.generate_tokens(open(filename).readline)
+    for token in tokens:
+        if token[0] == tokenize.COMMENT:
+            start = map_idx(token[2][0], token[2][1])
+            end = map_idx(token[3][0], token[3][1])
+            tree.body.append({"astNodeType":"Comment", "value":token[1], "lineno": token[2][0], "col_offset": token[2][1], "start":start, "end":end})
 
 def parse_file(filename):
     global enc, lines

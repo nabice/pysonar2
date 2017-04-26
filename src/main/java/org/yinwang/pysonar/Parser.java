@@ -668,6 +668,10 @@ public class Parser {
             return new Yield(value, file, start, end, line, col);
         }
 
+        if (type.equals("Comment")) {
+            return new Comment((String)map.get("value"), file, start, end, line, col);
+        }
+
         $.msg("\n[Please Report]: unexpected ast node: " + map.get("astNodeType"));
         return new Unsupported(file, start, end, line, col);
     }

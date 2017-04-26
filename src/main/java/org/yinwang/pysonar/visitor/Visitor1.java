@@ -138,6 +138,8 @@ public interface Visitor1<T, P> {
                 return visit((Yield)node, param);
             case YIELDFROM:
                 return visit((YieldFrom)node, param);
+            case COMMENT:
+                return visit((Comment)node, param);
 
             default:
                 throw new RuntimeException("unexpected node");
@@ -223,4 +225,5 @@ public interface Visitor1<T, P> {
     T visit(Withitem node, P param);
     T visit(Yield node, P param);
     T visit(YieldFrom node, P param);
+    T visit(Comment node, P param);
 }

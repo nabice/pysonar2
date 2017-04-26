@@ -65,4 +65,5 @@ public enum NodeType {
     WITHITEM,
     YIELD,
     YIELDFROM,
+    COMMENT,
 }

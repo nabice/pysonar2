@@ -946,6 +946,12 @@ public class TypeInferencer implements Visitor1<Type, State> {
     }
 
     @NotNull
+    @Override
+    public Type visit(Comment node, State s) {
+        return Types.StrInstance;
+    }
+
+    @NotNull
     private Type resolveUnion(@NotNull Collection<? extends Node> nodes, State s) {
         Type result = Types.UNKNOWN;
         for (Node node : nodes) {
