@@ -584,6 +584,10 @@ public class Parser {
             {
                 s = s.substring(1, s.length() - 1);
             }
+            else if (s.length() >= 2 && s.startsWith("'") && s.endsWith("'"))
+            {
+                s = s.substring(1, s.length() - 1);
+            }
             return new Str(s, file, start, end, line, col);
         }
 
