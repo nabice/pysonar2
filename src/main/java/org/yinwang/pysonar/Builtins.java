@@ -325,6 +325,11 @@ public class Builtins {
             addAttributes_beCareful(Types.StrInstance, names);
         }
 
+        protected void addInstAttrs(Type type, @NotNull String... names) {
+            for (String name : names) {
+                addAttr(name, type);
+            }
+        }
 
         protected void addUnknownAttrs(@NotNull String... names) {
             for (String name : names) {
@@ -2330,8 +2335,10 @@ public class Builtins {
 
             addAttr("exc_type", Types.NoneInstance);
 
-            addUnknownAttrs("__stderr__", "__stdin__", "__stdout__",
-                    "stderr", "stdin", "stdout", "version_info");
+            addUnknownAttrs("version_info");
+
+            addInstAttrs(BaseFileInst, "__stderr__", "__stdin__", "__stdout__",
+                    "stderr", "stdin", "stdout");
 
             addNumAttrs("api_version", "hexversion", "winver", "maxint", "maxsize",
                     "maxunicode", "py3kwarning", "dllhandle");
