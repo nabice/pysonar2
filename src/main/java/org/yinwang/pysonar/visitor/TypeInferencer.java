@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.HashSet;
 
 public class TypeInferencer implements Visitor1<Type, State> {
 
@@ -217,7 +218,7 @@ public class TypeInferencer implements Visitor1<Type, State> {
             if (!(targetType instanceof ModuleType)) {
                 selfType = targetType;
             }
-            Set<Binding> b = targetType.table.lookupAttr(attr.id);
+            Set<Binding> b = getAttrTypeForCall(targetType, attr.id);
             if (b != null) {
                 Analyzer.self.putRef(attr, b);
                 fun = State.makeUnion(b);
@@ -254,6 +255,23 @@ public class TypeInferencer implements Visitor1<Type, State> {
         } else {
             return resolveCall(fun, selfType, positional, kwTypes, kwArg, starArg, node);
         }
+    }
+
+    //get attributes
+    public Set<Binding> getAttrTypeForCall(Type type, String name){
+        Set<Binding> ret;
+        if(type instanceof UnionType){
+            ret = new HashSet<Binding>();
+            for(Type subType:((UnionType)type).types){
+                Set<Binding> sub = getAttrTypeForCall(subType, name);
+                if(sub != null){
+                    ret.addAll(sub);
+                }
+            }
+        }else{
+            ret = type.table.lookupAttr(name);
+        }
+        return ret;
     }
 
     @NotNull
