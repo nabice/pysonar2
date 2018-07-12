@@ -13,7 +13,7 @@ public class ClassType extends Type {
 
     public String name;
     public Type superclass;
-    private InstanceType instance;
+    public InstanceType instance;
 
     public ClassType(@NotNull String name, @Nullable State parent) {
         this.name = name;
