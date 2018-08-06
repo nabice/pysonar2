@@ -639,8 +639,8 @@ public class Builtins {
 
         String[] str_methods_str = {
                 "capitalize", "center", "decode", "encode", "expandtabs", "format",
-                "index", "join", "ljust", "lower", "lstrip", "partition", "replace",
-                "rfind", "rindex", "rjust", "rpartition", "rsplit", "rstrip",
+                "join", "ljust", "lower", "lstrip", "partition", "replace",
+                "rjust", "rpartition", "rstrip",
                 "strip", "swapcase", "title", "translate", "upper", "zfill"
         };
         for (String m : str_methods_str) {
@@ -650,14 +650,14 @@ public class Builtins {
 
         String[] str_methods_num = {
                 "count", "isalnum", "isalpha", "isdigit", "islower", "isspace",
-                "istitle", "isupper", "find", "startswith", "endswith"
+                "istitle", "isupper", "find", "startswith", "endswith", "index", "rfind", "rindex"
         };
         for (String m : str_methods_num) {
             Types.StrInstance.table.insert(m, newLibUrl("stdtypes", "str." + m),
                                            newFunc(Types.IntInstance), METHOD);
         }
 
-        String[] str_methods_list = {"split", "splitlines"};
+        String[] str_methods_list = {"split", "splitlines", "rsplit"};
         for (String m : str_methods_list) {
             Types.StrInstance.table.insert(m, newLibUrl("stdtypes", "str." + m),
                                            newFunc(newList(Types.StrInstance)), METHOD);
@@ -1749,10 +1749,14 @@ public class Builtins {
                 addFunction(s, Types.NoneInstance);
             }
 
-            for (String s : list("getegid", "getgid", "getpgid", "getpgrp",
-                    "getppid", "getuid", "getsid", "umask"))
+            for (String s : list("getpid", "getppid", "geteuid", "getegid", "getgid", "getpgid", "getpgrp", "getuid", "getsid", "umask"))
             {
                 addFunction(s, Types.IntInstance);
+            }
+
+            for (String s : list("getresuid", "getresgid"))
+            {
+                addFunction(s, newTuple(Types.IntInstance, Types.IntInstance, Types.IntInstance));
             }
 
             for (String s : list("getcwd", "ctermid", "getlogin", "getenv", "strerror")) {
