@@ -1865,7 +1865,7 @@ public class Builtins {
                     "mkdirs", "remove", "removedirs", "rename", "renames",
                     "rmdir", "symlink", "unlink", "utime"))
             {
-                addAttr(s, Types.NoneInstance);
+                addFunction(s, Types.NoneInstance);
             }
 
             for (String s : list("access", "lstat", "major", "minor",
