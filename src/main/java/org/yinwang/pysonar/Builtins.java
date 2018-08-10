@@ -818,16 +818,16 @@ public class Builtins {
             addFunction("tuple", newLibUrl("functions", "tuple"), new InstanceType(BaseTuple));
 
             // XXX:  need to model the following as built-in class types:
-            //   basestring, bool, buffer, frozenset, property, set, slice,
+            //   basestring, bool, buffer, property, slice,
             //   staticmethod, super and unicode
             String[] builtin_func_unknown = {
                     "apply", "basestring", "callable", "classmethod",
                     "coerce", "compile", "copyright", "credits", "delattr", "enumerate",
-                    "eval", "execfile", "exit", "filter", "frozenset", "getattr",
+                    "eval", "execfile", "exit", "filter", "getattr",
                     "help", "input", "intern", "iter", "license", "long",
                     "property", "quit", "raw_input", "reduce", "reload", "reversed",
-                    "set", "setattr", "slice", "sorted", "staticmethod", "super",
-                    "type", "unichr", "unicode", "format",
+                    "setattr", "slice", "sorted", "staticmethod", "super",
+                    "type", "unichr", "unicode", "format", "next",
             };
             for (String f : builtin_func_unknown) {
                 addFunction(f, newLibUrl("functions", f), Types.UNKNOWN);
@@ -869,6 +869,30 @@ public class Builtins {
             addAttr("None", newLibUrl("constants", "None"), Types.NoneInstance);
             addFunction("open", newTutUrl("inputoutput.html#reading-and-writing-files"), BaseFileInst);
             addFunction("__import__", newLibUrl("functions", "__import__"), newModule("<?>"));
+
+            ClassType set = newClass("set", null);
+            addMethod(set, "__len__", Types.IntInstance);
+            addMethod(set, "pop", Types.UNKNOWN);
+            for (String r : list("add", "clear", "difference_update", "discard", "intersection_update", "remove", "symmetric_difference_update", "update")) {
+                addMethod(set, r);
+            }
+            for (String r : list("__contains__", "isdisjoint", "issubset", "issuperset")) {
+                addMethod(set, r, Types.BoolInstance);
+            }
+            for (String r : list("copy", "difference", "intersection", "symmetric_difference", "union")) {
+                addMethod(set, r, newList(Types.UNKNOWN));
+            }
+            addClass(set);
+
+            ClassType frozenset = newClass("frozenset", null);
+            addMethod(frozenset, "__len__", Types.IntInstance);
+            for (String r : list("__contains__", "isdisjoint", "issubset", "issuperset")) {
+                addMethod(frozenset, r, Types.BoolInstance);
+            }
+            for (String r : list("copy", "difference", "intersection", "symmetric_difference", "union")) {
+                addMethod(frozenset, r, newList(Types.UNKNOWN));
+            }
+            addClass(frozenset);
 
             Analyzer.self.globaltable.insert("__builtins__", liburl(), module, ATTRIBUTE);
             Analyzer.self.globaltable.putAll(table);
