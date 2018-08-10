@@ -842,7 +842,7 @@ public class Builtins {
                 addFunction(f, newLibUrl("functions", f), Types.IntInstance);
             }
 
-            for (String f : list("hex", "oct", "repr", "chr")) {
+            for (String f : list("hex", "oct", "repr", "chr", "bin")) {
                 addFunction(f, newLibUrl("functions", f), Types.StrInstance);
             }
 
