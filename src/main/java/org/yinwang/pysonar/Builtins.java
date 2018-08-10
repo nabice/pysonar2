@@ -827,7 +827,7 @@ public class Builtins {
                     "help", "input", "intern", "iter", "license", "long",
                     "property", "quit", "raw_input", "reduce", "reload", "reversed",
                     "set", "setattr", "slice", "sorted", "staticmethod", "super",
-                    "type", "unichr", "unicode",
+                    "type", "unichr", "unicode", "format",
             };
             for (String f : builtin_func_unknown) {
                 addFunction(f, newLibUrl("functions", f), Types.UNKNOWN);
