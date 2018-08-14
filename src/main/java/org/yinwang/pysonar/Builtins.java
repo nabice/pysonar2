@@ -1178,8 +1178,8 @@ public class Builtins {
             addClass(ValuesView);
 
             ClassType deque = newClass("deque", table, objectType);
-            for (String n : list("append", "appendLeft", "clear",
-                    "extend", "extendLeft", "rotate"))
+            for (String n : list("append", "appendleft", "clear",
+                    "extend", "extendleft", "rotate"))
             {
                 deque.table.insert(n, dequeUrl(), newFunc(Types.NoneInstance), METHOD);
             }
