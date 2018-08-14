@@ -1605,10 +1605,10 @@ public class Builtins {
                     "dropwhile", "groupby", "ifilter",
                     "ifilterfalse", "imap", "islice", "izip",
                     "izip_longest", "permutations", "product",
-                    "repeat", "starmap", "takewhile", "tee"))
-            {
-                addClass(iterator);
+                    "repeat", "starmap", "takewhile", "tee")) {
+                addFunction(s, iterator);
             }
+            addClass(iterator);
         }
     }
 
