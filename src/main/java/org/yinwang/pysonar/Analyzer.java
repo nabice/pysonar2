@@ -463,6 +463,11 @@ public class Analyzer {
                     if (prev != null) {
                         prev.table.update(name.get(i).id, binding);
                     } else {
+                        //if import stmt is in class scope, we insert it into class's parent state.
+                        //because method's parent (xxx.forwarding) is class's parent.
+                        if(state.stateType == State.StateType.CLASS) {
+                            state = state.parent;
+                        }
                         state.update(name.get(i).id, binding);
                     }
 
