@@ -53,7 +53,8 @@ def parse_dump(filename, output, end_mark):
         f.close()
 
 def parse_comment(filename, tree):
-    tokens = tokenize.generate_tokens(open(filename).readline)
+    global enc
+    tokens = tokenize.generate_tokens(codecs.open(filename, 'r', enc).readline)
     for token in tokens:
         if token[0] == tokenize.COMMENT:
             start = map_idx(token[2][0], token[2][1])
