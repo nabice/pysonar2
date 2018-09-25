@@ -16,6 +16,7 @@ public class DictComp extends Node {
         this.value = value;
         this.generators = generators;
         addChildren(key);
+        addChildren(value);
         addChildren(generators);
     }
 
