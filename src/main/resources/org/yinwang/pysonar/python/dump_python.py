@@ -30,6 +30,11 @@ class AstEncoder(JSONEncoder):
             return str(obj)
 
 
+if python3:
+    default_enc = "utf-8"
+else:
+    default_enc = "latin1"
+
 enc = 'latin1'
 lines = ''
 
@@ -105,10 +110,10 @@ def detect_encoding(path):
         try:
             codecs.lookup(enc1)
         except LookupError:
-            return 'latin1', enc_len
+            return default_enc, enc_len
         return enc1, enc_len
     else:
-        return 'latin1', -1
+        return default_enc, -1
 
 
 #-------------------------------------------------------------
