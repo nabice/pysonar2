@@ -3,6 +3,7 @@ import re
 import sys
 import codecs
 import tokenize
+import os
 
 from json import JSONEncoder
 from ast import *
@@ -49,9 +50,10 @@ def parse_dump(filename, output, end_mark):
         tree = parse_file(filename)
         parse_comment(filename, tree)
         encoded = encoder.encode(tree)
-        f = open(output, "w")
-        f.write(encoded)
-        f.close()
+        with open(output, "w") as f:
+            f.write(encoded)
+            f.flush()
+            os.fsync(f.fileno())
     finally:
         # write marker file to signal write end
         f = open(end_mark, "w")
