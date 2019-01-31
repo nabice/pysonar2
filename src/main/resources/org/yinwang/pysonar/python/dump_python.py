@@ -84,12 +84,12 @@ def parse_file(filename):
         lines = re.sub('#.*coding\s*[:=]\s*[\w\d\-]+', '#' + ' ' * (enc_len - 1), lines)
 
     f.close()
-    return parse_string(lines, filename)
+    return parse_string(lines, filename, enc)
 
 
-def parse_string(string, filename=None):
+def parse_string(string, filename=None, enc="utf-8"):
     tree = ast.parse(string)
-    improve_ast(tree, string)
+    improve_ast(tree, string.encode(enc).decode("ascii", "replace"))
     if filename:
         tree.filename = filename
     return tree
