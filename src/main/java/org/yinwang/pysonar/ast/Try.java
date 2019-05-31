@@ -18,8 +18,9 @@ public class Try extends Node {
         this.body = body;
         this.orelse = orelse;
         this.finalbody = finalbody;
-        addChildren(handlers);
         addChildren(body, orelse);
+        addChildren(handlers);
+        addChildren(finalbody);
     }
 
     @NotNull
