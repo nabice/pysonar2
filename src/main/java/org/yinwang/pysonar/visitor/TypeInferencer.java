@@ -494,6 +494,7 @@ public class TypeInferencer implements Visitor1<Type, State> {
     @Override
     public Type visit(If node, State s) {
         Type type1, type2;
+        State s_origin = s.copy();
         State s1 = s.copy();
         State s2 = s.copy();
 
@@ -502,13 +503,17 @@ public class TypeInferencer implements Visitor1<Type, State> {
         inferInstance(node.test, s, s1);
 
         if (node.body != null) {
-            type1 = visit(node.body, s1);
+            type1 = visit(node.body, s);
+            s1 = s.copy();
+            s.overwrite(s_origin);
         } else {
             type1 = Types.CONT;
         }
 
         if (node.orelse != null) {
             type2 = visit(node.orelse, s2);
+            s2 = s.copy();
+            s.overwrite(s_origin);
         } else {
             type2 = Types.CONT;
         }
