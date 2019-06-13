@@ -599,11 +599,16 @@ public class TypeInferencer implements Visitor1<Type, State> {
     @NotNull
     @Override
     public Type visit(ImportFrom node, State s) {
+        Type mod;
         if (node.module == null) {
-            return Types.CONT;
+            //from . import sth
+            State m_s = s.getStateOfType(State.StateType.MODULE);
+            if(m_s != null) {
+                mod = m_s.type;
+            }
+        } else {
+            mod = Analyzer.self.loadModule(node.module, s);
         }
-
-        Type mod = Analyzer.self.loadModule(node.module, s);
 
         if (mod == null) {
             addWarningToNode(node, "Cannot load module");
@@ -622,9 +627,29 @@ public class TypeInferencer implements Visitor1<Type, State> {
                         Analyzer.self.putRef(first, bs);
                     }
                 } else {
-                    List<Name> ext = new ArrayList<>(node.module);
-                    ext.add(first);
-                    Type mod2 = Analyzer.self.loadModule(ext, s);
+                    Type mod2 = null;
+                    if(node.module == null) {
+                        //from . import sth
+                        String sub_path = getSubModulePath(mod.file, first.id);
+                        File initFile = new File($.joinPath(sub_path, "__init__.py").getPath());
+                        if (initFile.exists()) {
+                            mod2 = Analyzer.self.loadFile(initFile.getPath());
+                        } else {
+                            File startFile = new File(sub_path + Globals.FILE_SUFFIX);
+                            if (startFile.exists()) {
+                                mod2 = Analyzer.self.loadFile(startFile.getPath());
+                            }
+                        }
+                        if(mod2 != null) {
+                            Binding binding = Binding.createFileBinding(first.id, initFile.getPath(), mod);
+                            s.update(first.id, binding);
+                            Analyzer.self.putRef(first, binding);
+                        }
+                    } else {
+                        List<Name> ext = new ArrayList<>(node.module);
+                        ext.add(first);
+                        mod2 = Analyzer.self.loadModule(ext, s, false);
+                    }
                     if (mod2 != null) {
                         if (a.asname != null) {
                             Binding binding = Binding.createFileBinding(a.asname.id, mod2.file, mod2);
@@ -641,6 +666,10 @@ public class TypeInferencer implements Visitor1<Type, State> {
         }
 
         return Types.CONT;
+    }
+
+    private String getSubModulePath(String file, String sub) {
+        return new File(new File(file).getParent(), sub).getPath();
     }
 
     @NotNull
