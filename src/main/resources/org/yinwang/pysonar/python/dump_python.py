@@ -75,7 +75,7 @@ def parse_file(filename):
     lines = f.read()
 
     # remove BOM
-    lines = re.sub(u'\ufeff', ' ', lines)
+    lines = re.sub(u'\ufeff', '', lines)
 
     # replace the encoding decl by spaces to fool python parser
     # otherwise you get 'encoding decl in unicode string' syntax error
