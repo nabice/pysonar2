@@ -413,7 +413,7 @@ public class Analyzer {
 
         Type mt = getBuiltinModule(qname);
         if (mt != null) {
-            state.insert(name.get(0).id,
+            state.insert(qname,
                     new Url(Builtins.LIBRARY_URL + mt.table.path + ".html"),
                     mt, Binding.Kind.SCOPE);
             return mt;
